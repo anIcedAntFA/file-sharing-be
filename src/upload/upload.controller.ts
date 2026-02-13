@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   Controller,
   Post,
@@ -19,6 +20,10 @@ import {
   InitUploadResponseDto,
   PresignedUrlDto,
 } from './dtos/upload.response.dto';
+=======
+import { Controller, Post, Body } from '@nestjs/common';
+import { UploadService } from './upload.service';
+>>>>>>> 74c4116 (backup)
 
 @ApiTags('File Upload')
 @Controller('v1/upload')
@@ -26,6 +31,7 @@ export class UploadController {
   constructor(private s3: UploadService) {}
 
   @Post('init')
+<<<<<<< HEAD
   @ApiOperation({
     summary: 'Initialize multipart upload',
     description:
@@ -40,10 +46,14 @@ export class UploadController {
   async initUpload(
     @Body() body: InitUploadDto,
   ): Promise<InitUploadResponseDto> {
+=======
+  async initUpload(@Body() body: { fileName: string; contentType: string }) {
+>>>>>>> 74c4116 (backup)
     return this.s3.createMultipartUpload(body.fileName, body.contentType);
   }
 
   @Post('presign')
+<<<<<<< HEAD
   @ApiOperation({
     summary: 'Generate presigned URLs for parts',
     description:
@@ -60,11 +70,19 @@ export class UploadController {
     @Body() body: PresignUrlsDto,
   ): Promise<PresignedUrlDto[]> {
     const ip = req.ip;
+=======
+  async getPartUrls(
+    @Body() body: { key: string; uploadId: string; partCount: number },
+  ) {
+>>>>>>> 74c4116 (backup)
     return this.s3.generatePresignedUrls(
       body.key,
       body.uploadId,
       body.partCount,
+<<<<<<< HEAD
       ip,
+=======
+>>>>>>> 74c4116 (backup)
     );
   }
 
@@ -81,8 +99,18 @@ export class UploadController {
   })
   @UsePipes(new ValidationPipe({ transform: true }))
   async completeUpload(
+<<<<<<< HEAD
     @Body() body: CompleteUploadDto,
   ): Promise<CompleteUploadResponseDto> {
+=======
+    @Body()
+    body: {
+      key: string;
+      uploadId: string;
+      parts: { ETag: string; PartNumber: number }[];
+    },
+  ) {
+>>>>>>> 74c4116 (backup)
     return this.s3.completeMultipartUpload(body.key, body.uploadId, body.parts);
   }
 }
